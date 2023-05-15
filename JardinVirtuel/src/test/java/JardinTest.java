@@ -1,19 +1,30 @@
 import jardin.Emplacement;
+import jardin.InputReader;
 import jardin.Jardin;
-import jardin.VegetalTest;
-import jardin.flore.Ail;
-import jardin.flore.Carotte;
-import jardin.flore.Etat;
-import jardin.flore.Vegetal;
-import org.junit.jupiter.api.BeforeAll;
+import jardin.flore.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayInputStream;
+import java.util.AbstractMap;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+// mockito
+
+@ExtendWith(MockitoExtension.class)
 public class JardinTest {
+
+    @Mock
+    private InputReader inputReaderMock;
+
+    @Mock
+    private Betterave betteraveMock;
 
     private Jardin jardin;
     @BeforeEach
@@ -57,15 +68,38 @@ public class JardinTest {
 
     @Test
     public void testSemer() {
-        String input = "0 0 1";
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-        jardin.ajouterPanier("Ail", 5);
+        //String input = "0 0 1";
+        //System.setIn(new ByteArrayInputStream(input.getBytes()));
+        jardin.setInputReader(inputReaderMock);
+
+        when(inputReaderMock.readIntValue()).thenReturn(1);
+        jardin.ajouterPanier("Ail", 4);
 
         jardin.semer();
 
-        assertEquals(4, jardin.getPanier().get("Ail"));
-        assertTrue(jardin.getEmplacement()[0][0].getVeg() instanceof Ail);
+        verify(inputReaderMock, times(3)).readIntValue();
+
+        assertEquals(3, jardin.getPanier().get("Ail"));
+        assertTrue(jardin.getEmplacement()[1][1].getVeg() instanceof Ail);
     }
 
+    @Test
+    public void testRecolterEnFleurEtOGM() {
+        when(betteraveMock.getEtat()).thenReturn(Etat.FLEUR);
+        AbstractMap.SimpleEntry<Integer, Integer> loc = new AbstractMap.SimpleEntry<>(1, 1);
+        when(betteraveMock.seDupliquer(3, 5)).thenReturn(loc);
+
+        jardin.getEmplacement()[0][0] = new Emplacement(betteraveMock);
+
+        jardin.recolter();
+
+        verify(betteraveMock).getEtat();
+        verify(betteraveMock).seDupliquer(3, 5);
+
+        assertNull(jardin.getEmplacement()[0][0]);
+        assertNotNull(jardin.getEmplacement()[1][1]);
+
+
+    }
 
 }

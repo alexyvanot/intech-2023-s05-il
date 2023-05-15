@@ -18,6 +18,12 @@ import jardin.flore.Vegetal;
 
 public class Jardin {
 
+	private InputReader inputReader = new InputReader();
+
+	public void setInputReader(InputReader inputReader) {
+		this.inputReader = inputReader;
+	}
+
 	private int longueur;
 	private int largeur;
 	private HashMap<String, Integer> panier;
@@ -83,13 +89,13 @@ public class Jardin {
 		Scanner sc = new Scanner(System.in);
 
 		System.out.println("Indiquer l'axe X");
-		int x = sc.nextInt();
+		int x = inputReader.readIntValue();
 
 		System.out.println("Indiquer l'axe Y");
-		int y = sc.nextInt();
+		int y = inputReader.readIntValue();
 
 		System.out.println("Quel vegetal? (1. Ail , 2. Betterave , 3. Carotte , 4. Tomate");
-		int choiceVegetal = sc.nextInt();
+		int choiceVegetal = inputReader.readIntValue();
 
 		switch (choiceVegetal) {
 		case 1:
@@ -137,6 +143,8 @@ public class Jardin {
 	public void recolter() {
 		
 		//Emplacement[][] duplicate = emplacement.clone();
+
+		HashMap<SimpleEntry<Integer, Integer>, Vegetal> vegAsemer = new HashMap<>();
 		
 		for (int x = 0; x < this.longueur; x++) {
 			for (int y = 0; y < this.largeur; y++) {
@@ -151,10 +159,14 @@ public class Jardin {
 					} else if (veg instanceof IOgm) {
 						IOgm v = (IOgm) veg;
 						SimpleEntry<Integer, Integer> simpleEntry = v.seDupliquer(this.longueur, this.largeur);
-						emplacement[simpleEntry.getKey()][simpleEntry.getValue()] = new Emplacement(veg);
+						vegAsemer.put(simpleEntry, veg);
 					}
 				}
 			}
+		}
+		for(Iterator<SimpleEntry<Integer, Integer>> Iterator = vegAsemer.keySet().iterator(); Iterator.hasNext();) {
+			SimpleEntry<Integer, Integer> entry = Iterator.next();
+			emplacement[entry.getKey()][entry.getValue()] = new Emplacement(vegAsemer.get(entry));
 		}
 	}
 
