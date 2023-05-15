@@ -3,13 +3,11 @@ import jardin.InputReader;
 import jardin.Jardin;
 import jardin.flore.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayInputStream;
 import java.util.AbstractMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -68,8 +66,6 @@ public class JardinTest {
 
     @Test
     public void testSemer() {
-        //String input = "0 0 1";
-        //System.setIn(new ByteArrayInputStream(input.getBytes()));
         jardin.setInputReader(inputReaderMock);
 
         when(inputReaderMock.readIntValue()).thenReturn(1);
