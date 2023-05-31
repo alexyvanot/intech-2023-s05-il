@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.concurrent.TimeUnit;
@@ -19,11 +20,12 @@ public class PlayerControllerFunctionalTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @WithMockUser
     @Test
     @Timeout(unit = TimeUnit.MINUTES, value = 1)
     public void testGetPlayers() {
 
-        Player[] players = restTemplate.getForObject("/player", Player[].class);
+        Player[] players = restTemplate.withBasicAuth("user","password").getForObject("/player", Player[].class);
 
         assertEquals(1, players[0].getPlayerId());
         assertEquals("test1", players[0].getUsername());
@@ -35,11 +37,12 @@ public class PlayerControllerFunctionalTest {
 
     }
 
+    @WithMockUser
     @Test
     @Timeout(unit = TimeUnit.MINUTES, value = 1)
     public void testGetPlayer() {
 
-        Player player = restTemplate.getForObject("/player/1", Player.class);
+        Player player = restTemplate.withBasicAuth("user","password").getForObject("/player/1", Player.class);
 
         assertEquals(1, player.getPlayerId());
         assertEquals("test1", player.getUsername());
