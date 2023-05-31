@@ -34,4 +34,15 @@ public class PlayerControllerIntegrationTest {
         ra.andExpect(MockMvcResultMatchers.jsonPath("$[0].level").value(10));
     }
 
+    @WithMockUser
+    @Test
+    public void testGetPlayerNotFound() throws Exception {
+        //Arrange
+        RequestBuilder rBuilder = MockMvcRequestBuilders.get("/player/4");
+        //Act
+        ResultActions rActions = mockMvc.perform(rBuilder);
+        //Assert
+        rActions.andExpect(MockMvcResultMatchers.status().is(404));
+    }
+
 }

@@ -60,7 +60,7 @@ public class PlayerControllerUnitTest {
         RequestBuilder rb = MockMvcRequestBuilders.get("/player/1");
         ResultActions ra = mockMvc.perform(rb);
         ra.andDo(MockMvcResultHandlers.print());
-        ra.andExpect(MockMvcResultMatchers.status().isNotFound());
+        ra.andExpect(MockMvcResultMatchers.status().is(404));
     }
 
 }

@@ -37,4 +37,9 @@ public class PlayerController {
 		}		
 	}
 
+	@GetMapping(value = "/")
+	public String getNameApplication() throws InterruptedException {
+		return "Game 1 Application";
+	}
+
 }
